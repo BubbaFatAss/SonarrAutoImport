@@ -37,6 +37,10 @@ namespace SonarrAuto
         public int timeoutSecs { get; set; }
         [DataMember]
         public bool trimFolders { get; set; }
+        [DataMember]
+        public bool renameAdditionalFiles { get; set; }
+        [DataMember]
+        public List<string> additionalExtensions { get; set; }
     }
 
     [DataContract]

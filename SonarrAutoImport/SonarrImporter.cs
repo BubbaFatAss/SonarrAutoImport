@@ -162,6 +162,23 @@ namespace SonarrAuto
                             videoFullPath = MoveFile(file.FullName, newFileName);
                         }
 
+                        if( settings.renameAdditionalFiles )
+                        {
+                            var otherFiles = allFiles.Where( x=> string.Equals(Path.GetFileNameWithoutExtension(x.Name), Path.GetFileNameWithoutExtension(file.Name), StringComparison.OrdinalIgnoreCase ) )
+                                        .Where( x => settings.additionalExtensions.Contains(x.Extension, StringComparer.OrdinalIgnoreCase))
+                                        .Where(x => !IsPartialDownload( x ) )
+                                        .ToList();
+                            foreach( var otherFile in otherFiles )
+                            {
+                                string newAdditionalFileName = TransformFileName(settings.transforms, otherFile.FullName, verbose);
+                                if (!dryRun)
+                                {
+                                    MoveFile(otherFile.FullName, newAdditionalFileName);
+                                }
+                            }    
+                            
+                        }
+
                         string path = TranslatePath(settings.downloadsFolder, videoFullPath, settings.mappingPath);
 
                         if (!dryRun)
